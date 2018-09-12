@@ -1,0 +1,220 @@
+
+Emergency_breaking.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000000da  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .comment      00000030  00000000  00000000  0000012e  2**0
+                  CONTENTS, READONLY
+  2 .debug_aranges 00000048  00000000  00000000  0000015e  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  3 .debug_info   0000022c  00000000  00000000  000001a6  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  4 .debug_abbrev 00000146  00000000  00000000  000003d2  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  5 .debug_line   0000012a  00000000  00000000  00000518  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_frame  00000084  00000000  00000000  00000644  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_str    00000237  00000000  00000000  000006c8  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_loc    000000f0  00000000  00000000  000008ff  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_ranges 00000038  00000000  00000000  000009ef  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	21 c0       	rjmp	.+66     	; 0x46 <__bad_interrupt>
+   4:	20 c0       	rjmp	.+64     	; 0x46 <__bad_interrupt>
+   6:	1f c0       	rjmp	.+62     	; 0x46 <__bad_interrupt>
+   8:	1e c0       	rjmp	.+60     	; 0x46 <__bad_interrupt>
+   a:	1d c0       	rjmp	.+58     	; 0x46 <__bad_interrupt>
+   c:	1c c0       	rjmp	.+56     	; 0x46 <__bad_interrupt>
+   e:	1b c0       	rjmp	.+54     	; 0x46 <__bad_interrupt>
+  10:	1a c0       	rjmp	.+52     	; 0x46 <__bad_interrupt>
+  12:	19 c0       	rjmp	.+50     	; 0x46 <__bad_interrupt>
+  14:	18 c0       	rjmp	.+48     	; 0x46 <__bad_interrupt>
+  16:	17 c0       	rjmp	.+46     	; 0x46 <__bad_interrupt>
+  18:	16 c0       	rjmp	.+44     	; 0x46 <__bad_interrupt>
+  1a:	15 c0       	rjmp	.+42     	; 0x46 <__bad_interrupt>
+  1c:	14 c0       	rjmp	.+40     	; 0x46 <__bad_interrupt>
+  1e:	13 c0       	rjmp	.+38     	; 0x46 <__bad_interrupt>
+  20:	12 c0       	rjmp	.+36     	; 0x46 <__bad_interrupt>
+  22:	11 c0       	rjmp	.+34     	; 0x46 <__bad_interrupt>
+  24:	10 c0       	rjmp	.+32     	; 0x46 <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_clear_bss>:
+  32:	20 e0       	ldi	r18, 0x00	; 0
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	01 c0       	rjmp	.+2      	; 0x3c <.do_clear_bss_start>
+
+0000003a <.do_clear_bss_loop>:
+  3a:	1d 92       	st	X+, r1
+
+0000003c <.do_clear_bss_start>:
+  3c:	a0 36       	cpi	r26, 0x60	; 96
+  3e:	b2 07       	cpc	r27, r18
+  40:	e1 f7       	brne	.-8      	; 0x3a <.do_clear_bss_loop>
+  42:	32 d0       	rcall	.+100    	; 0xa8 <main>
+  44:	48 c0       	rjmp	.+144    	; 0xd6 <_exit>
+
+00000046 <__bad_interrupt>:
+  46:	dc cf       	rjmp	.-72     	; 0x0 <__vectors>
+
+00000048 <initializzation_pin>:
+    }
+}
+
+void initializzation_pin(void)
+{
+	DDRB|= (1<<PB0) | (1<<PB3);
+  48:	87 b3       	in	r24, 0x17	; 23
+  4a:	89 60       	ori	r24, 0x09	; 9
+  4c:	87 bb       	out	0x17, r24	; 23
+	PORTB&= ~(1<<PB0);
+  4e:	c0 98       	cbi	0x18, 0	; 24
+  50:	08 95       	ret
+
+00000052 <stop_button>:
+}
+
+void stop_button(_Signal_control *s_signal_control)
+{
+	DDRC &= ~(1<<PC0);
+  52:	a0 98       	cbi	0x14, 0	; 20
+	PORTC = 0x00;
+  54:	15 ba       	out	0x15, r1	; 21
+	if (INPUT_SIGNAL==1)
+  56:	98 9b       	sbis	0x13, 0	; 19
+  58:	0c c0       	rjmp	.+24     	; 0x72 <stop_button+0x20>
+		{
+			INDICATOR_ON;
+  5a:	c0 9a       	sbi	0x18, 0	; 24
+			OCR1A = s_signal_control->highSignalStopPush;
+  5c:	fc 01       	movw	r30, r24
+  5e:	23 81       	ldd	r18, Z+3	; 0x03
+  60:	30 e0       	ldi	r19, 0x00	; 0
+  62:	3b bd       	out	0x2b, r19	; 43
+  64:	2a bd       	out	0x2a, r18	; 42
+			OCR1B = s_signal_control->lowSignalStopPush;
+  66:	82 81       	ldd	r24, Z+2	; 0x02
+  68:	90 e0       	ldi	r25, 0x00	; 0
+  6a:	99 bd       	out	0x29, r25	; 41
+  6c:	88 bd       	out	0x28, r24	; 40
+			SIGNAL_STOP_LOW_REVERSE;
+  6e:	c3 98       	cbi	0x18, 3	; 24
+  70:	08 95       	ret
+		}
+			else
+			{
+				INDICATOR_OFF;		
+  72:	c0 98       	cbi	0x18, 0	; 24
+				OCR1A = s_signal_control->highSignalStop;
+  74:	fc 01       	movw	r30, r24
+  76:	21 81       	ldd	r18, Z+1	; 0x01
+  78:	30 e0       	ldi	r19, 0x00	; 0
+  7a:	3b bd       	out	0x2b, r19	; 43
+  7c:	2a bd       	out	0x2a, r18	; 42
+				OCR1B = s_signal_control->lowSignalStop;	
+  7e:	80 81       	ld	r24, Z
+  80:	90 e0       	ldi	r25, 0x00	; 0
+  82:	99 bd       	out	0x29, r25	; 41
+  84:	88 bd       	out	0x28, r24	; 40
+				SIGNAL_STOP_HIGH_REVERSE;			
+  86:	c3 9a       	sbi	0x18, 3	; 24
+  88:	08 95       	ret
+
+0000008a <initialization_timer_pwm>:
+}
+
+//PWM use on timer2
+void initialization_timer_pwm(_Signal_control *s_signal_control)
+{
+	TCCR1A |= (1 << COM1A1)|(0 << COM1A0) | (1 << COM1B1)|(0 << COM1B0) // Установим биты COM1A1-COM1A0:0b10, означает сброс вывода канала A при сравнении
+  8a:	8f b5       	in	r24, 0x2f	; 47
+  8c:	82 6a       	ori	r24, 0xA2	; 162
+  8e:	8f bd       	out	0x2f, r24	; 47
+	|(1 << WGM11)|(0 << WGM10); // Установим биты WGM13-10:0b1110, согласно таблице это
+	TCCR1B |= (1 << WGM13)|(1 << WGM12) // будет режим - FAST PWM, где верхний предел счета задается битом ICR1
+  90:	8e b5       	in	r24, 0x2e	; 46
+  92:	89 61       	ori	r24, 0x19	; 25
+  94:	8e bd       	out	0x2e, r24	; 46
+	|(0 << CS12)|(0 << CS11)|(1 << CS10); // Битами CS12-10:0b001 задаем источник тактового сигнала для таймера МК, включен без делителя
+	TCNT1 = 0x00; // начальная установка счетчика
+  96:	1d bc       	out	0x2d, r1	; 45
+  98:	1c bc       	out	0x2c, r1	; 44
+	ICR1 = 0xFF; // задаем период ШИМ, здесь у нас число 255,
+  9a:	8f ef       	ldi	r24, 0xFF	; 255
+  9c:	90 e0       	ldi	r25, 0x00	; 0
+  9e:	97 bd       	out	0x27, r25	; 39
+  a0:	86 bd       	out	0x26, r24	; 38
+	// по формуле fPWM=fclk_I/O/N*(1+ICR1)// вычисляем частоту ШИМ, она будет равна 15625 Hz	
+	PIN_LOW_SIGNAL_STOP_OUT;
+  a2:	b9 9a       	sbi	0x17, 1	; 23
+	PIN_HIGH_SIGNAL_STOP_OUT;
+  a4:	ba 9a       	sbi	0x17, 2	; 23
+  a6:	08 95       	ret
+
+000000a8 <main>:
+uint8_t adc_low = 0x00;
+uint8_t adc_high = 0x00;
+uint8_t voltage;
+
+int main(void)
+{
+  a8:	cf 93       	push	r28
+  aa:	df 93       	push	r29
+  ac:	00 d0       	rcall	.+0      	; 0xae <main+0x6>
+  ae:	00 d0       	rcall	.+0      	; 0xb0 <main+0x8>
+  b0:	cd b7       	in	r28, 0x3d	; 61
+  b2:	de b7       	in	r29, 0x3e	; 62
+	_Signal_control s_main_signal_control;
+	
+	s_main_signal_control.lowSignalStop = 0x1A; //28
+  b4:	8a e1       	ldi	r24, 0x1A	; 26
+  b6:	89 83       	std	Y+1, r24	; 0x01
+	s_main_signal_control.highSignalStop = 0x35; //50 53
+  b8:	85 e3       	ldi	r24, 0x35	; 53
+  ba:	8a 83       	std	Y+2, r24	; 0x02
+	
+	s_main_signal_control.lowSignalStopPush = 0x5A; //58  65  90
+  bc:	8a e5       	ldi	r24, 0x5A	; 90
+  be:	8b 83       	std	Y+3, r24	; 0x03
+	s_main_signal_control.highSignalStopPush = 0x7F; //127
+  c0:	8f e7       	ldi	r24, 0x7F	; 127
+  c2:	8c 83       	std	Y+4, r24	; 0x04
+		
+	initialization_timer_pwm(&s_main_signal_control);
+  c4:	ce 01       	movw	r24, r28
+  c6:	01 96       	adiw	r24, 0x01	; 1
+  c8:	e0 df       	rcall	.-64     	; 0x8a <initialization_timer_pwm>
+	initializzation_pin();
+  ca:	be df       	rcall	.-132    	; 0x48 <initializzation_pin>
+	sei();
+  cc:	78 94       	sei
+    while(1)
+    {
+		stop_button(&s_main_signal_control);
+  ce:	ce 01       	movw	r24, r28
+  d0:	01 96       	adiw	r24, 0x01	; 1
+  d2:	bf df       	rcall	.-130    	; 0x52 <stop_button>
+  d4:	fc cf       	rjmp	.-8      	; 0xce <main+0x26>
+
+000000d6 <_exit>:
+  d6:	f8 94       	cli
+
+000000d8 <__stop_program>:
+  d8:	ff cf       	rjmp	.-2      	; 0xd8 <__stop_program>
