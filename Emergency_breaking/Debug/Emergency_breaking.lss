@@ -183,18 +183,18 @@ int main(void)
   b2:	de b7       	in	r29, 0x3e	; 62
 	_Signal_control s_main_signal_control;
 	
-	s_main_signal_control.lowSignalStop = 0x1A; //28
-  b4:	8a e1       	ldi	r24, 0x1A	; 26
+	s_main_signal_control.lowSignalStop = 0xB; //28
+  b4:	8b e0       	ldi	r24, 0x0B	; 11
   b6:	89 83       	std	Y+1, r24	; 0x01
-	s_main_signal_control.highSignalStop = 0x35; //50 53
-  b8:	85 e3       	ldi	r24, 0x35	; 53
+	s_main_signal_control.highSignalStop = 0x19; //50 53
+  b8:	89 e1       	ldi	r24, 0x19	; 25
   ba:	8a 83       	std	Y+2, r24	; 0x02
 	
-	s_main_signal_control.lowSignalStopPush = 0x5A; //58  65  90
-  bc:	8a e5       	ldi	r24, 0x5A	; 90
+	s_main_signal_control.lowSignalStopPush = 0x49; //58  65  90
+  bc:	89 e4       	ldi	r24, 0x49	; 73
   be:	8b 83       	std	Y+3, r24	; 0x03
-	s_main_signal_control.highSignalStopPush = 0x7F; //127
-  c0:	8f e7       	ldi	r24, 0x7F	; 127
+	s_main_signal_control.highSignalStopPush = 0x78; //127
+  c0:	88 e7       	ldi	r24, 0x78	; 120
   c2:	8c 83       	std	Y+4, r24	; 0x04
 		
 	initialization_timer_pwm(&s_main_signal_control);

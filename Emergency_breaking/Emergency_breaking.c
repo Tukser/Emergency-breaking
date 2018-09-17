@@ -41,11 +41,11 @@ int main(void)
 {
 	_Signal_control s_main_signal_control;
 	
-	s_main_signal_control.lowSignalStop = 0x1A; //28
-	s_main_signal_control.highSignalStop = 0x35; //50 53
+	s_main_signal_control.lowSignalStop = 0xB; //28
+	s_main_signal_control.highSignalStop = 0x19; //50 53
 	
-	s_main_signal_control.lowSignalStopPush = 0x5A; //58  65  90
-	s_main_signal_control.highSignalStopPush = 0x7F; //127
+	s_main_signal_control.lowSignalStopPush = 0x49; //58  65  90
+	s_main_signal_control.highSignalStopPush = 0x78; //127
 		
 	initialization_timer_pwm(&s_main_signal_control);
 	initializzation_pin();
