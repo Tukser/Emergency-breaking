@@ -9,6 +9,11 @@ int main(void)
 
 	initializzation_pin();
 	sei();
+	/*DDRB|=  (1<<PB3);
+	PORTB|= (1<<PB3);
+
+	DDRC|=  (1<<PC5);
+	PORTC|= (1<<PC5);*/
     while(1)
 		{
 			stop_button();
@@ -17,12 +22,10 @@ int main(void)
 
 void initializzation_pin(void)
 {
-	//
-	DDRB|= (1<<PB2) | (1<<PB0) | (1<<PB1);
+	DDRB|= (1<<PB2) | (1<<PB0) | (1<<PB1) | (1<<PB4);
 	PORTB&= ~(1<<PB0);
-
-	//DDRD|= (1<<PD6) | (1<<PD7);
-	//PORTD &= ~(1<<PD6) | ~(1<<PD7);
+	DDRC &= ~(1<<PC0);
+	PORTC &= ~(1<<PC0);
 
 	//Initialization PWM for stop stop_button
 	TCCR1A |= (1<<WGM11) | (1<<COM1A1) | (1<<COM1B1);
@@ -38,13 +41,11 @@ void initializzation_pin(void)
 
 void stop_button()
 {
-	DDRC &= ~(1<<PC0);
-	PORTC &= ~(1<<PC0);
 	if (INPUT_SIGNAL==1)
 		{
 			INDICATOR_ON;
 			OCR1A=78;
-			OCR1B=152;
+			OCR1B=156;
 		}
 	else
 		{

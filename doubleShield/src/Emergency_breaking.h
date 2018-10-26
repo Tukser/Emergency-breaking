@@ -13,7 +13,7 @@ void initializzation_pin(void);
 
 void stop_button(void);
 
-void read_position_pedal(void);
+void position_pedal(void);
 
 void warning_signal(void);
 
